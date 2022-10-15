@@ -26,11 +26,12 @@ repositories {
 }
 
 dependencies {
+    compile 'com.github.jsimone:webapp-runner:8.5.11.3'
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile  "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-web-boot"
     compile "org.grails:grails-logging"
     compile "org.grails:grails-plugin-rest"
@@ -60,9 +61,6 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile 'org.grails.plugins:spring-security-core:3.2.3'
     compile 'org.grails.plugins:spring-security-rest:2.0.0.RC1'
-    compile 'com.github.jsimone:webapp-runner:8.5.11.3'
-    compile 'org.grails.plugins:spring-security-core:3.2.3'
-    compile 'org.grails.plugins:spring-security-rest:2.0.0.RC1'
 }
 
 bootRun {
@@ -83,6 +81,7 @@ assets {
     minifyJs = true
     minifyCss = true
 }
+
 task stage() {
     dependsOn clean, war
 }
