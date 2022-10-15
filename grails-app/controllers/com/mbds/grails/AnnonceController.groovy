@@ -120,7 +120,7 @@ class AnnonceController {
             '*'{ respond annonce, [status: OK] }
         }
     }
-
+    @Secured(value=["hasRole('ROLE_ADMIN')"])
     def delete(Long id) {
         if (id == null) {
             notFound()

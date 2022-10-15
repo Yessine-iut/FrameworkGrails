@@ -1,4 +1,6 @@
 <%@ page import="com.mbds.grails.Annonce" %>
+<%@ page import="com.mbds.grails.UserRole" %>
+<%@ page import="com.mbds.grails.User"  %>
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <script src="https://www.w3schools.com/lib/w3.js"></script>
 
@@ -43,7 +45,11 @@
                 <div class="d-flex flex-row">
                     <a href="/annonce/edit/${annonce.id}"  style="text-decoration: none;"><button class="btn btn-secondary"><i class="fas fa-pen"></i></button></a>
                     <form action="/annonce/delete/${annonce.id}" method="post"><input type="hidden" name="_method" value="DELETE" id="_method">
-                        <button class="btn btn-danger delete" type="submit" value="Delete" onclick="return confirm('Are you sure?');"><i style="color: white" class="fas fa-trash"></i></button>
+                        <g:set var="usernameLog" value="${sec.username()}" />
+                        <g:set var="role" value="${UserRole.findByUser(User.findByUsername(usernameLog))}" />
+                        <g:if test="${role.getRole().getAuthority() == 'ROLE_ADMIN'}">
+                            <button class="btn btn-danger delete" type="submit" value="Delete" onclick="return confirm('Are you sure?');"><i style="color: white" class="fas fa-trash"></i></button>
+                        </g:if>
                     </form>
                 </div>
             </td>
