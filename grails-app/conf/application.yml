@@ -133,6 +133,5 @@ server:
     port: 8081
     
 illustrations:
-    #basePath: C:/Users/dofla/Desktop/grails-lecoincoin-gograils/grails-app/assets/images
     basePath: C:/Users/dofla/Desktop/grails-lecoincoin-gograils/grails-app/assets/images
     baseUrl: http://localhost:8081/assets/

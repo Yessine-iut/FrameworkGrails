@@ -13,15 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <g:layoutHead/>
 
-    <sec:ifLoggedIn>
-        <g:set var="usernameLog" value="${sec.username()}" />
-        <g:set var="user" value="${User.findByUsername(usernameLog)}" />
-        <g:set var="role" value="${UserRole.findByUser(user)}" />
-        <g:if test="${role.getRole().getAuthority() == 'ROLE_CLIENT'}">
-            <meta http-equiv="Refresh" content="0; url=/client/annoncesList" />
-        </g:if>
-    </sec:ifLoggedIn>
-
 </head>
 <body>
 
