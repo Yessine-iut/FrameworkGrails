@@ -5,9 +5,10 @@
   Time: 14:25
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" import="grails.plugin.springsecurity.SpringSecurityService; com.mbds.grails.Annonce"  %>
+<%@ page contentType="text/html;charset=UTF-8" import="grails.plugin.springsecurity.SpringSecurityService; com.mbds.grails.Annonce; com.mbds.grails.User"  %>
 <html>
 <head>
+    <meta name="layout" content="client" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,93 +16,28 @@
 
     <title>Liste des annonces</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="/assets/bootstrap.css"/>
-    <link type="text/css" rel="stylesheet" href="/assets/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="/assets/slick-theme.css"/>
-    <link type="text/css" rel="stylesheet" href="/assets/nouislider.min.css"/>
-    <link rel="stylesheet" href="/assets/font-awesome.min.css">
 
-    <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="/assets/style.css"/>
 </head>
 
 <body>
-<!-- HEADER -->
-<header>
-    <!-- MAIN HEADER -->
-    <div id="header">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- LOGO -->
-                <div class="col-md-3">
-                    <div class="header-logo">
-                        <a href="#" class="logo">
-                            <img src="/assets/logo.png" width="250px" alt="">
-                        </a>
-                    </div>
-                </div>
-                <!-- /LOGO -->
 
-                <!-- SEARCH BAR -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <form>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /SEARCH BAR -->
-
-                <!-- ACCOUNT -->
-                <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
-                        <div>
-                            <span style="color: white;">connected as <sec:loggedInUserInfo field="username"/></span>
-                        </div>
-
-                        <!-- Menu Toogle -->
-                        <div class="menu-toggle">
-                            <a href="#">
-                                <i class="fa fa-bars"></i>
-                                <span>Menu</span>
-                            </a>
-                        </div>
-                        <!-- /Menu Toogle -->
-                    </div>
-                </div>
-                <!-- /ACCOUNT -->
-            </div>
-            <!-- row -->
-        </div>
-        <!-- container -->
-    </div>
-    <!-- /MAIN HEADER -->
-</header>
-<!-- /HEADER -->
-
-<!-- NAVIGATION -->
-<nav id="navigation">
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
     <!-- container -->
     <div class="container">
-        <!-- responsive-nav -->
-        <div id="responsive-nav">
-            <!-- NAV -->
-            <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Autre page</a></li>
-                <li><a href="#">Autre page</a></li>
-            </ul>
-            <!-- /NAV -->
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li class="active"><a href="/client/annoncesList">Show all annonces (${Annonce.count})</a></li>
+                </ul>
+            </div>
         </div>
-        <!-- /responsive-nav -->
+        <!-- /row -->
     </div>
     <!-- /container -->
-</nav>
-<!-- /NAVIGATION -->
+</div>
+<!-- /BREADCRUMB -->
 
 <!-- SECTION -->
 <div class="section">
@@ -109,191 +45,105 @@
     <div class="container">
         <!-- row -->
         <div class="row">
+            <!-- ASIDE -->
+            <div id="aside" class="col-md-3">
+                <!-- aside Widget -->
+                <div class="aside">
+                    <h3 class="aside-title">Authors</h3>
+                    <div class="checkbox-filter">
+                        <g:each in="${User.list()}" var="user">
+                            <div class="input-checkbox">
+                                <label for="category-1">
+                                    <span></span>
+                                    <a href="/client/annoncesList?author=${user.id}">${user.username}</a>
 
-            <!-- section title -->
-            <div class="col-md-12">
-                <div class="section-title">
-                    <h3 class="title">Annonces</h3>
-                    <div class="section-nav">
-                        <ul class="section-tab-nav tab-nav">
-                            <!-- <li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab1">Accessories</a></li> -->
-                            filtre ?
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /section title -->
-
-            <!-- Products tab & slick -->
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="products-tabs">
-                        <!-- tab -->
-                        <div id="tab1" class="tab-pane active">
-                            <div class="products-slick" data-nav="#slick-nav-1">
-                                <!-- product -->
-                                <g:each in="${Annonce.list()}" var="annonce">
-                                    <div class="product">
-                                        <div class="product-img">
-                                            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                                <div class="carousel-inner">
-                                                    <g:each in="${annonce.illustrations}" var="illustration">
-                                                        <div class="carousel-item active">
-                                                            <img class="d-block" src="${grailsApplication.config.illustrations.baseUrl+illustration.filename}">
-                                                        </div>
-                                                    </g:each>
-                                                </div>
-                                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="sr-only">Previous</span>
-                                                </a>
-                                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="sr-only">Next</span>
-                                                </a>
-                                            </div>
-                                            <div class="product-label">
-                                                <!--<span class="sale">-30%</span> -->
-                                                <span class="new">NEW</span>
-                                            </div>
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">${annonce.title}</a></h3>
-                                            <p class="product-category">${annonce.description}</p>
-                                            <h4 class="product-price">$${annonce.price}</h4>
-                                            <p class="product-category">Active: ${annonce.active}</p>
-                                            <p class="product-category">Author: ${annonce.author.username}</p>
-                                            <!-- <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                                <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                            </div> -->
-                                        </div>
-                                        <!--<div class="add-to-cart">
-                                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                        </div> -->
-                                    </div>
-                                </g:each>
+                                </label>
                             </div>
-                            <div id="slick-nav-1" class="products-slick-nav"></div>
-                        </div>
-                        <!-- /tab -->
+                        </g:each>
                     </div>
                 </div>
+                <!-- /aside Widget -->
             </div>
-            <!-- Products tab & slick -->
+            <!-- /ASIDE -->
+
+            <!-- STORE -->
+            <div id="store" class="col-md-9">
+                <a href="/client/newAnnonce" class="btn btn-secondary">Create new annonce</a>
+                <!-- store products -->
+                <div class="row">
+
+                    <g:if test="${params.author}">
+                        <g:set var="annonceData" value="${User.findById(params.author).getAnnonces()}" />
+                    </g:if>
+                    <g:else>
+                        <g:set var="annonceData" value="${Annonce.list()}" />
+                    </g:else>
+                    <g:each in="${annonceData}" var="annonce">
+                        <div class="col-md-4 col-xs-6">
+                            <div class="product">
+                                <div class="product-img">
+                                    <img src="${grailsApplication.config.illustrations.baseUrl+annonce.illustrations.first().filename}">
+                                    <div class="product-label">
+                                        <span class="new">NEW</span>
+                                    </div>
+                                </div>
+                                <div class="product-body">
+
+                                    <h3 class="product-name"><a href="/client/product/${annonce.id}">${annonce.title}</a></h3>
+                                    <h4 class="product-price">$${annonce.price}</h4>
+                                    <p class="product-category">${annonce.description}</p>
+                                    <div class="product-rating">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <g:if test="${sec.loggedInUserInfo(field: 'username') == annonce.getAuthor().username.toString()}">
+                                        <form action="/annonce/delete/${annonce.id}" method="post">
+                                            <input type="hidden" name="_method" value="DELETE" id="_method">
+                                            <div hidden class="form-group fieldcontain required">
+                                                <label for="redirectUrl"></label>
+                                                <input type="text" class="form-control" name="redirectUrl" value="/client/annoncesList" id="redirectUrl">
+                                            </div>
+
+                                            <a class="btn btn-secondary" href="/client/editAnnonce/${annonce.id}"><i class="fa fa-edit"></i>Edit</a>
+                                            <input type="submit" name="delete" class="btn btn-danger" value="Delete" id="delete" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" >
+
+                                        </form>
+
+                                    </g:if>
+                                </div>
+
+                            </div>
+                        </div>
+                    </g:each>
+
+                </div>
+                <!-- /store products -->
+
+                <!-- store bottom filter -->
+                <!--<div class="store-filter clearfix">
+                    <span class="store-qty">Showing 20-${annonceCount} products</span>
+                    <ul class="store-pagination">
+                        <li class="active">1</li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                    </ul>
+                </div> -->
+                <!--<g:paginate next="Forward" prev="Back"
+                maxsteps="0" controller="annonce"
+                action="list" total="${annonceCount}" /> -->
+                <!-- /store bottom filter -->
+            </div>
+            <!-- /STORE -->
         </div>
         <!-- /row -->
     </div>
     <!-- /container -->
 </div>
 <!-- /SECTION -->
-
-<!-- FOOTER -->
-<footer id="footer">
-    <!-- top footer -->
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-3 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-title">About Us</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-                        <ul class="footer-links">
-                            <li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-                            <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-                            <li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-title">Categories</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">Hot deals</a></li>
-                            <li><a href="#">Laptops</a></li>
-                            <li><a href="#">Smartphones</a></li>
-                            <li><a href="#">Cameras</a></li>
-                            <li><a href="#">Accessories</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="clearfix visible-xs"></div>
-
-                <div class="col-md-3 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-title">Information</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Orders and Returns</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-title">Service</h3>
-                        <ul class="footer-links">
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">View Cart</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                            <li><a href="#">Track My Order</a></li>
-                            <li><a href="#">Help</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /top footer -->
-
-    <!-- bottom footer -->
-    <div id="bottom-footer" class="section">
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <ul class="footer-payments">
-                        <li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-                        <li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-                    </ul>
-                    <span class="copyright">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </span>
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /bottom footer -->
-</footer>
-<!-- /FOOTER -->
-
-<!-- jQuery Plugins -->
-<script src="/assets/jquery-2.2.0.min.js"></script>
-<script src="/assets/bootstrap.js"></script>
-<script src="/assets/slick.min.js"></script>
-<script src="/assets/nouislider.min.js"></script>
-<script src="/assets/jquery.zoom.min.js"></script>
-<script src="/assets/main.js"></script>
 </body>
 </html>
