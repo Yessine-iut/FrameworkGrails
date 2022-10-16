@@ -14,8 +14,6 @@ class AnnonceController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def springSecurityService
-
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond annonceService.list(params), model:[annonceCount: annonceService.count()]
@@ -30,18 +28,8 @@ class AnnonceController {
         respond new Annonce(params)
     }
 
-    @Secured(['ROLE_ADMIN', 'ROLE_CLIENT'])
+    @Secured(value=["hasRole('ROLE_ADMIN')"])
     def save(Annonce annonce) {
-        def userIdLog = springSecurityService.getCurrentUserId().toString()
-        def userinstance = User.findById(Integer.parseInt(userIdLog))
-        def userrole = UserRole.findByUser(userinstance)
-
-        if(userrole.role.getAuthority() == "ROLE_CLIENT" && userIdLog != params.author.id) {
-            //error
-            redirect(uri: "/client/annoncesList")
-            return
-        }
-
         File assets=new File(grailsApplication.config.illustrations.basePath)
         int idFile=assets.listFiles().length+1;
         request.getFiles("annonces[]").each { file ->
@@ -69,11 +57,7 @@ class AnnonceController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'annonce.label', default: 'Annonce'), annonce.id])
-                if(params.redirectUrl) {
-                    redirect(uri: params.redirectUrl)
-                }else {
-                    redirect annonce
-                }
+                redirect annonce
             }
             '*' { respond annonce, [status: CREATED] }
         }
@@ -83,19 +67,8 @@ class AnnonceController {
         respond annonceService.get(id)
     }
 
-    @Secured(['ROLE_ADMIN', 'ROLE_CLIENT'])
     def update() {
         Annonce annonce = Annonce.get(params.id)
-
-        def userIdLog = springSecurityService.getCurrentUserId().toString()
-        def userinstance = User.findById(Integer.parseInt(userIdLog))
-        def userrole = UserRole.findByUser(userinstance)
-
-        if(userrole.role.getAuthority() == "ROLE_CLIENT" && userIdLog != annonce.author.id) {
-            //error
-            redirect(uri: "/client/annoncesList")
-            return
-        }
         if (annonce == null) {
             notFound()
             return
@@ -142,17 +115,12 @@ class AnnonceController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'annonce.label', default: 'Annonce'), annonce.id])
-                if(params.redirectUrl) {
-                    redirect(uri: params.redirectUrl)
-                }else {
-                    redirect annonce
-                }
+                redirect annonce
             }
             '*'{ respond annonce, [status: OK] }
         }
     }
-
-    @Secured(['ROLE_ADMIN', 'ROLE_CLIENT'])
+    @Secured(value=["hasRole('ROLE_ADMIN')"])
     def delete(Long id) {
         if (id == null) {
             notFound()
@@ -164,11 +132,7 @@ class AnnonceController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'annonce.label', default: 'Annonce'), id])
-                if(params.redirectUrl) {
-                    redirect(uri: params.redirectUrl)
-                }else {
-                    redirect action:"index", method:"GET"
-                }
+                redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
         }
